@@ -61,7 +61,7 @@ function AppendRow() {
         resource: TEST_ROW_DATA
     });
 }
-    
+
 function main() {
     var googleAuth = GetGoogleAuthClient().then(function(authClient) {
         globalData.gAPIAuthClient = authClient;
