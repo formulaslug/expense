@@ -1,0 +1,27 @@
+$white:   #fefefe;
+$grey100: #101010;
+$grey10:  #E0E0E0;
+$grey20:  #BFBFBF;
+$green20: #78D296;
+$green30: #3CB371;
+$green70: #2E8B57;
+
+body {
+    background-color: $green30;
+    width: 100vw;
+    height: 100vh;
+    color: $black;
+    font-family: "Rubik", sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+section {
+    width: 100vw;
+    padding: 5vw 4em;
+    margin-top: 10vh;
+    background-color: white;
+    -webkit-box-shadow: 0px 12px 12px 0px rgba(16, 16, 16, 0.1);
+    -moz-box-shadow:    0px 12px 12px 0px rgba(16, 16, 16, 0.1);
+    box-shadow:         0px 12px 12px 0px rgba(16, 16, 16, 0.1);
+}
