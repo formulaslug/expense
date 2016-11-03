@@ -15,7 +15,7 @@ function LoadFile(fileName, encoding = 'utf-8') {
     return new Promise(function(resolveFn, rejectFn) {
         fs.readFile(fileName, encoding, function(err, fileData) {
             if (err) {
-                rejectFn(fileName, err);
+                rejectFn(err);
                 return;
             }
             resolveFn(fileData);
