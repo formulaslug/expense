@@ -72,6 +72,9 @@ function main() {
 
     Promise.all([googleAuth, spreadsheetIDFetcher]).done(function() {
         AppendRow();
+    },
+    function(err) {
+        console.log(err.toString());
     });
 }
 main();
