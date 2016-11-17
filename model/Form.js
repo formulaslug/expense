@@ -5,6 +5,6 @@ var FormSchema = mongoose.Schema({
     name: String,
     cost: String,
     link: String
-});
+})
 
 module.exports = mongoose.model('Form', FormSchema);
