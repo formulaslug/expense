@@ -1,6 +1,16 @@
 # expense
 The #finance team's expense tracking tool.
 
+## Getting Started
+We use MongoDB and a REST API. Here's how to get that working:
+
+1. Install [Node JS](https://nodejs.org/en/download/) and [MongoDB](https://www.mongodb.com/download-center?jmp=nav)
+2. Go to `~/api/`
+3. `npm install`
+4. Start MongoDB `mongod -dbpath db`
+5. `node app.js`
+
+
 ## Understanding the Problem
 The finance team has been tasked with tracking all of the value (cash and materials) moving in and out of the organization. To help us with that task, we’re building software to automate some of the tracking.
 
