@@ -1,0 +1,27 @@
+// Import font with <link href="https://fonts.googleapis.com/css?family=Rubik:400,700" rel="stylesheet">
+// To compile this code, navigate to the parent directory, and enter
+//      > sass --watch style.scss:style.css --style compressed
+
+// Colors
+$green80: #34915E;
+$green20: #3BB371;
+$grey10: #FEFEFE;
+$grey20: #E0E0E0;
+$grey80: #BFBFBF;
+$grey90: #101010;
+
+body {
+    background-color: $green20;
+    color: $green80;
+    font-family:'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+}
+
+section {
+    background-color: $grey10;
+    font-weight: 400;
+}

@@ -1,8 +1,15 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+  background-color: #3BB371;
+  color: #34915E;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 1em;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex; }
 
-a {
-  color: #00B7FF;
-}
+section {
+  background-color: #FEFEFE;
+  font-weight: 400; }
+
+/*# sourceMappingURL=style.css.map */
