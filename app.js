@@ -1,82 +1,78 @@
 // app.js
 
-// package
+// Import necessary packages
 var express = require('express')
-var app = express()
 var bodyParser = require('body-parser')
 var mongoose   = require('mongoose')
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 var Form = require('./model/Form')
+var app = express()
 
-
-mongoose.connect('mongodb://localhost:27017'); // connect to our database
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-var port = process.env.PORT || 3000;
+// Connect to our database
+mongoose.connect('mongodb://localhost:27017')
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+var port = process.env.PORT || 3000
 
 
 // Routes
-var router = express.Router();
+var router = express.Router()
 
+// What does this do?
 router.use(function(req, res, next) {
-    // console.log(req.connection.remoteAddress + ' response: ' + res.statusCode)
+    console.log(req.connection.remoteAddress + ':' + res.statusCode)
     next()
 })
 
+// What does this do?
 router.get('/', function(req, res) {
-    res.json({ message: 'nothing here for you right now.' });
-});
+    res.json({ message: 'nothing here for you right now.' })
+})
 
 
-// REGISTER
-
-// Post to Slack
-function postMessageToSlack(name, amount) {
+// Sends reimbursement information to Slack
+function postMessageToSlack(message) {
     var url = "https://hooks.slack.com/services/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"
-    var text = name + " requested a reimbursement of $" + amount + "."
 
-    var request = new XMLHttpRequest();
-    request.open('POST', url, true);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    request.send('payload=' + JSON.stringify({ "text": text }));
+    // Opens a new XMLHttpRequest, sends payload to Slack
+    var request = new XMLHttpRequest()
+    request.open('POST', url, true)
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+    request.send('payload=' + JSON.stringify({ "text": message }))
 }
 
 
-// Form
+// What does this do?
 router.route('/form').post(function(req, res) {
     var form = new Form()
-    // form.name = req.body.name
-    // form.cost = req.body.cost
+    var first_name = req.body.first_name
+    var last_name = req.body.last_name
+    var email = req.body.email
+    var amount_requested = req.body.value
 
-    postMessageToSlack(req.body.first_name, req.body.value)
+    // Sends "Alexander Price requested a reimbursement of $1000"
+    var fullname = first_name + ' ' + last_name
+    postMessageToSlack(fullname + ' requested a reimbursement of $' + value + '.')
 
-    // if (form.name == null && form.cost == null) {
-    //     form.link = "https://formulaslug.com/form?{#}";
-    // }
-
-    // form.save(function(err) {
-    //     if (err)
-    //         res.send(err);
-    //     res.json(form);
-    // })
+    form.save(function(err) {
+        if (err)
+            res.send(err)
+        res.json(form)
+    })
 })
-// .get(function(req, res) {
-//     Form.find(function(err, form) {
-//         if (err)
-//             res.send(err);
-//         res.json(form);
-//     });
-// });
-
-// END REGISTER
+.get(function(req, res) {
+    Form.find(function(err, form) {
+        if (err)
+            res.send(err)
+        res.json(form)
+    });
+});
 
 
-// prefix routed with /api
+// Prefix routed with /api
 app.use('/api', router)
 
-// START THE SERVER
-// =============================================================================
+
+// Start the server
 app.listen(port)
-console.log('cash money on ' + port)
+console.log('Cash money on port ' + port + '.')

@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var schema = mongoose.Schema();
+var mongoose = require('mongoose')
+var schema = mongoose.Schema()
 
 var FormSchema = mongoose.Schema({
     name: String,
@@ -7,4 +7,4 @@ var FormSchema = mongoose.Schema({
     link: String
 })
 
-module.exports = mongoose.model('Form', FormSchema);
+module.exports = mongoose.model('Form', FormSchema)
