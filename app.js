@@ -8,6 +8,29 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 var Form = require('./model/Form')
 var app = express()
 
+var GSheets = require('./lib/GSheets.js');
+
+var gSheets = new GSheets({
+    authJSONFile: 'service-account.json',
+    spreadsheetId: '1FPSSc0wsow9-vWqHT0v9rP_tTAtUmukJpvHM0p73Apo'
+});
+
+gSheets.on('ready', OnReady);
+gSheets.on('error', function(err) {
+    console.log(err);
+});
+
+var recordWriter;
+
+function OnReady(expenseSheet) {
+    recordWriter = expenseSheet.getTableWriter({
+        range: 'A1:D1',
+        valueFormat: ['${first_name}', '${last_name}', '${email}', '${cost}'],
+        majorDimension: 'ROWS'
+    });
+}
+
+
 // Connect to our database
 mongoose.connect('mongodb://localhost:27017')
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -59,8 +82,10 @@ router.route('/form').post(function(req, res) {
     var fullname = first_name + ' ' + last_name
     // postMessageToSlack(fullname + ' requested a reimbursement of $' + value + '.')
 
+    recordWriter.append(form);
+	
     form.save(function(err) {
-        if (err)
+        if (err)	
             res.send(err)
         res.json(form)
     })
