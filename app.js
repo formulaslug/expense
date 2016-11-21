@@ -8,6 +8,29 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 var Form = require('./model/Form')
 var app = express()
 
+var GSheets = require('./lib/GSheets.js');
+
+var gSheets = new GSheets({
+    authJSONFile: 'service-account.json',
+    spreadsheetId: '1FPSSc0wsow9-vWqHT0v9rP_tTAtUmukJpvHM0p73Apo'
+});
+
+gSheets.on('ready', OnReady);
+gSheets.on('error', function(err) {
+    console.log(err);
+});
+
+var recordWriter;
+
+function OnReady(expenseSheet) {
+    recordWriter = expenseSheet.getTableWriter({
+        range: 'A1:D1',
+        valueFormat: ['${first_name}', '${last_name}', '${email}', '${cost}'],
+        majorDimension: 'ROWS'
+    });
+}
+
+
 // Connect to our database
 mongoose.connect('mongodb://localhost:27017')
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -31,7 +54,7 @@ router.get('/', function(req, res) {
 
 
 // Sends reimbursement information to Slack
-function postMessageToSlack(message) {
+/*function postMessageToSlack(message) {
     var url = "https://hooks.slack.com/services/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"
 
     // Opens a new XMLHttpRequest, sends payload to Slack
@@ -39,7 +62,7 @@ function postMessageToSlack(message) {
     request.open('POST', url, true)
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     request.send('payload=' + JSON.stringify({ "text": message }))
-}
+} */
 
 
 // What does this do?
@@ -48,14 +71,21 @@ router.route('/form').post(function(req, res) {
     var first_name = req.body.first_name
     var last_name = req.body.last_name
     var email = req.body.email
-    var amount_requested = req.body.value
+    var amount_requested = req.body.value	
+	
+	form.first_name = first_name;
+	form.last_name = last_name;
+	form.email = email;
+	form.cost = amount_requested;
 
     // Sends "Alexander Price requested a reimbursement of $1000"
     var fullname = first_name + ' ' + last_name
-    postMessageToSlack(fullname + ' requested a reimbursement of $' + value + '.')
+    // postMessageToSlack(fullname + ' requested a reimbursement of $' + value + '.')
 
+    recordWriter.append(form);
+	
     form.save(function(err) {
-        if (err)
+        if (err)	
             res.send(err)
         res.json(form)
     })
