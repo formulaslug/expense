@@ -5,10 +5,9 @@ The #finance team's expense tracking tool.
 We use MongoDB and a REST API. Here's how to get that working:
 
 1. Install [Node JS](https://nodejs.org/en/download/) and [MongoDB](https://www.mongodb.com/download-center?jmp=nav)
-2. Go to `~/api/`
-3. `npm install`
-4. Start MongoDB `mongod -dbpath db`
-5. `node app.js`
+2. `npm install`
+3. Start MongoDB `mongod -dbpath db`
+4. `node bin/www`
 
 
 ## Understanding the Problem
