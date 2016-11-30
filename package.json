@@ -6,8 +6,12 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "body-parser": "~1.0.1",
+    "ejs": "^2.5.3",
     "express": "~4.0.0",
+    "googleapis": "^14.2.0",
     "mongoose": "~3.6.13",
-    "body-parser": "~1.0.1"
+    "promise": "^7.1.1",
+    "validator": "^6.2.0"
   }
 }
