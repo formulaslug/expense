@@ -35,14 +35,20 @@ router.post('/', function(req, res) {
   	form.cost = req.body.value;
 
     if(!validator.isAlpha(form.first_name) || !validator.isAlpha(form.last_name) ||
-        !validator.isEmail(form.email) || !validator.isCurrency(form.cost)) {
-        backURL=req.header('Referer') || '/';
-        res.redirect(backURL);
+        form.cost.length == 0 || form.email.length == 0) {
+          res.render('index', { title: 'Expense', error: 'Please fill out all the forms.' });
+          return;
+    } else if(!validator.isEmail(form.email)) {
+        res.render('index', { title: 'Expense', error: 'Please enter a valid email.' });
+        return;
+    } else if(!validator.isCurrency(form.cost)) {
+        res.render('index', { title: 'Expense', error: 'Please enter a valid currency.' });
+        return;
     }
 
     recordWriter.append(form);
 
-    res.json(form);
+    res.render('index', { title: 'Expense', error: 'Success! Form Sent!' });
 });
 
 router.get('/', function(req, res) {

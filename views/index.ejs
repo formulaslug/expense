@@ -6,13 +6,21 @@
 </head>
 
 <body>
-    <form action="http://localhost:3000/expense/" method="post">
-        First Name: <input type="text" name="first_name"><br>
-        Last Name: <input type="text" name="last_name"><br>
-        Email: <input type="text" name="email"><br>
-        Value: <input type="text" name="value"><br>
-        <input type="submit" value="Submit">
-    </form>
+    <div class="banner">
+      <h1><%= title %></h1>
+      <p><%= error %></p>
+    </div>
+    <div class="form">
+      <form action="http://localhost:3000/expense/" method="post">
+          First Name: <input type="text" name="first_name"><br>
+          Last Name: <input type="text" name="last_name"><br>
+          Email: <input type="text" name="email"><br>
+          Value: <input type="text" name="value"><br>
+          <input type="submit" value="Submit">
+      </form>
+    </div>
+    <div class="footer">
+    </div>
 </body>
 
 </html>
