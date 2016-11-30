@@ -6,12 +6,13 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "asap": "^2.0.5",
     "body-parser": "~1.0.1",
-    "ejs": "^2.5.3",
+    "ejs": "~2.5.3",
     "express": "~4.0.0",
     "googleapis": "^14.2.0",
     "mongoose": "~3.6.13",
     "promise": "^7.1.1",
-    "validator": "^6.2.0"
+    "validator": "~6.2.0"
   }
 }
