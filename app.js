@@ -1,108 +1,63 @@
 // app.js
 
-// Import necessary packages
-var express = require('express')
-var bodyParser = require('body-parser')
-var mongoose   = require('mongoose')
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
-var Form = require('./model/Form')
-var app = express()
-
-var GSheets = require('./lib/GSheets.js');
-
-var gSheets = new GSheets({
-    authJSONFile: 'service-account.json',
-    spreadsheetId: '1FPSSc0wsow9-vWqHT0v9rP_tTAtUmukJpvHM0p73Apo'
-});
-
-gSheets.on('ready', OnReady);
-gSheets.on('error', function(err) {
-    console.log(err);
-});
-
-var recordWriter;
-
-function OnReady(expenseSheet) {
-    recordWriter = expenseSheet.getTableWriter({
-        range: 'A1:D1',
-        valueFormat: ['${first_name}', '${last_name}', '${email}', '${cost}'],
-        majorDimension: 'ROWS'
-    });
-}
-
+/**
+* Module dependencies
+*/
+var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var mongoose   = require('mongoose');
+var app = express();
 
 // Connect to our database
-mongoose.connect('mongodb://localhost:27017')
+// mongoose.connect('mongodb://localhost:27017')
+
+// routes
+var routes = require('./routes/index');
+var restAPI = require('./routes/restAPI');
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-var port = process.env.PORT || 3000
 
+app.use('/', routes);
+app.use('/expense', restAPI);
 
-// Routes
-var router = express.Router()
-
-// What does this do?
-router.use(function(req, res, next) {
-    console.log(req.connection.remoteAddress + ':' + res.statusCode)
-    next()
-})
-
-// What does this do?
-router.get('/', function(req, res) {
-    res.json({ message: 'nothing here for you right now.' })
-})
-
-
-// Sends reimbursement information to Slack
-/*function postMessageToSlack(message) {
-    var url = "https://hooks.slack.com/services/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"
-
-    // Opens a new XMLHttpRequest, sends payload to Slack
-    var request = new XMLHttpRequest()
-    request.open('POST', url, true)
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-    request.send('payload=' + JSON.stringify({ "text": message }))
-} */
-
-
-// What does this do?
-router.route('/form').post(function(req, res) {
-    var form = new Form()
-    var first_name = req.body.first_name
-    var last_name = req.body.last_name
-    var email = req.body.email
-    var amount_requested = req.body.value	
-	
-	form.first_name = first_name;
-	form.last_name = last_name;
-	form.email = email;
-	form.cost = amount_requested;
-
-    // Sends "Alexander Price requested a reimbursement of $1000"
-    var fullname = first_name + ' ' + last_name
-    // postMessageToSlack(fullname + ' requested a reimbursement of $' + value + '.')
-
-    recordWriter.append(form);
-	
-    form.save(function(err) {
-        if (err)	
-            res.send(err)
-        res.json(form)
-    })
-})
-.get(function(req, res) {
-    Form.find(function(err, form) {
-        if (err)
-            res.send(err)
-        res.json(form)
-    });
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
+// error handlers
 
-// Prefix routed with /api
-app.use('/api', router)
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
 
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
+});
 
-// Start the server
-app.listen(port)
-console.log('Cash money on port ' + port + '.')
+// end error handlers
+
+module.exports = app;
