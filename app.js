@@ -10,7 +10,7 @@ var mongoose   = require('mongoose');
 var app = express();
 
 // Connect to our database
-// mongoose.connect('mongodb://localhost:27017')
+mongoose.connect('mongodb://localhost:27017', function(err) {});
 
 // routes
 var routes = require('./routes/index');
@@ -57,6 +57,21 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+});
+
+// If the connection succeeds
+mongoose.connection.on('connected', function () {
+  console.log('Database connection opened');
+});
+
+// If the connection throws an error
+mongoose.connection.on('error',function (err) {
+  console.log('Database connection error: ' + err);
+});
+
+// If the connection disconnects
+mongoose.connection.on('disconnected', function () {
+  console.log('Database connection disconnected');
 });
 
 // end error handlers
