@@ -1,9 +1,11 @@
 {
-  "name": "expense-backend",
+  "name": "expense",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+	"//prestart": "mongod --dbpath data --fork --logpath /dev/null",
+	"start": "node ./bin/www",
+	"poststop": "mongo admin --eval 'db.shutdownServer()' > /dev/null"
   },
   "dependencies": {
     "asap": "^2.0.5",
