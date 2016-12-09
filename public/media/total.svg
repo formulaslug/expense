@@ -1,0 +1,12 @@
+<svg width="16" height="18" viewBox="0 0 16 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:figma="http://www.figma.com/figma/ns">
+<title>Vector 8</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(3449 1710)" figma:type="canvas">
+<g id="Vector 8" style="mix-blend-mode:normal;" figma:type="vector">
+<use xlink:href="#path0_stroke" transform="translate(-3449 -1709)" fill="#101010" style="mix-blend-mode:normal;"/>
+</g>
+</g>
+<defs>
+<path id="path0_stroke" d="M 0 16.75L 16 16.75L 16 15.25L 0 15.25L 0 16.75ZM 16 -0.75L 6 -0.75L 6 0.75L 16 0.75L 16 -0.75ZM 6 4.08333L 15.3333 4.08333L 15.3333 2.58333L 6 2.58333L 6 4.08333ZM 6 7.41667L 16 7.41667L 16 5.91667L 6 5.91667L 6 7.41667ZM 6 10.75L 14 10.75L 14 9.25L 6 9.25L 6 10.75ZM 6 14.0833L 15.3333 14.0833L 15.3333 12.5833L 6 12.5833L 6 14.0833ZM 2.75 14L 2.75 12L 1.25 12L 1.25 14L 2.75 14ZM 2.75 12L 2.75 10L 1.25 10L 1.25 12L 2.75 12ZM 0 12.75L 2 12.75L 2 11.25L 0 11.25L 0 12.75ZM 2 12.75L 4 12.75L 4 11.25L 2 11.25L 2 12.75Z"/>
+</defs>
+</svg>
