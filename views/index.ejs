@@ -9,9 +9,13 @@
 <body>
     <div class="banner">
         <h1>Expense Tracker</h1>
-    </div>
-    <div>
-      <p>todo</p>
+        <h2>Simulate Slack Request</h2>
+        <% if (locals.message) { %>
+            <p><%= locals.message %></p>
+        <% } %>
+        <form action="http://localhost:3000/expense/slack/" method="post">
+          <input type="submit" value="Request">
+        </form>
     </div>
     <div class="footer">
     </div>

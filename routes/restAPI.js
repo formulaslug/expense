@@ -52,22 +52,22 @@ router.post('/', function(req, res) {
     form.email = body.email;
     form.cost = body.value;
 
-    if(!validator.isAlpha(form.first_name) || !validator.isAlpha(form.last_name) ||
-        form.cost.length == 0 || form.email.length == 0) {
-          res.render('index', { title: 'Expense', error: 'Please fill out all the forms.' });
-          return;
-    } else if(!validator.isEmail(form.email)) {
-        res.render('index', { title: 'Expense', error: 'Please enter a valid email.' });
+    if(!validator.isEmail(form.email)) {
+        res.render('expense', { form, title: 'Expense', error: 'Please enter a valid email.' });
         return;
+    } else if(!validator.isAlpha(form.first_name) || !validator.isAlpha(form.last_name) ||
+        form.cost.length == 0 || form.email.length == 0) {
+          res.render('expense', { form, title: 'Expense', error: 'Please fill out all the forms.' });
+          return;
     } else if(!validator.isCurrency(form.cost)) {
-        res.render('index', { title: 'Expense', error: 'Please enter a valid currency.' });
+        res.render('expense', { form, title: 'Expense', error: 'Please enter a valid currency.' });
         return;
     }
 
     recordWriter.append(form);
 
     console.log('debug state: ' + mongoose.connection.readyState);
-    res.render('index', { title: 'Expense', error: 'Success! Form Sent!' });
+    res.render('index', { title: 'Expense', message: 'Success! Form Sent!' });
 });
 
 // POST slack
@@ -86,13 +86,12 @@ router.post('/slack', function(req, res) {
 
   schema.save(function(err) {
     if(err) {
-      console.log(err);
+      res.status(404).render('404');
     } else {
-      console.log('Slack Request: ' + schema.first_name + ' ' + schema.last_name);
+      res.json(schema.link);
     }
   });
 
-  res.json(schema.link);
 });
 
 module.exports = router;

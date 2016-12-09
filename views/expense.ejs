@@ -2,12 +2,12 @@
 <html>
 
 <head>
-    <!--<link href="stylesheets/style.css" rel="stylesheet">-->
+    <link href="stylesheets/style.css" rel="stylesheet">
     <title>expense</title>
 </head>
 
 <body>
-    <div class="banner">
+    <div class="form">
         <h1><%= title %></h1>
         <% if (locals.form.first_name) { %>
             <h2>
@@ -20,8 +20,6 @@
         <% if (locals.error) { %>
             <p><%= locals.error %></p>
         <% } %>
-    </div>
-    <div class="form">
         <form action="http://localhost:3000/expense/" method="post">
             First Name: <input type="text" name="first_name"
             <% if (locals.form.first_name) { %>
