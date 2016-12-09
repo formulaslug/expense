@@ -2,25 +2,23 @@
 <html>
 
 <head>
-    <link href="stylesheets/style.css" rel="stylesheet">
-    <title>expense</title>
+<link href="stylesheets/style.css" rel="stylesheet">
+<title>expense</title>
 </head>
 
 <body>
     <div class="banner">
         <h1>Expense Tracker</h1>
-        <h2>Simulate Slack Request</h2>
+
         <% if (locals.message) { %>
-            <p><%= locals.message %></p>
+        <p><%= locals.message %></p>
         <% } %>
-        <form action="http://localhost:3000/expense/slack/" method="post">
-          <input type="submit" value="Request">
+
+        <form action="http://localhost:3000/expense/" method="post">
+            <input type="text" name="username" placeholder="@your-username">
+            <input type="submit" value="Request">
         </form>
     </div>
-
-    <form action="http://localhost:3000/expense/slack/" method="post">
-        <input type="submit" value="Request">
-    </form>
 
     <div class="footer">
     </div>

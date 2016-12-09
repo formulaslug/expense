@@ -9,6 +9,7 @@ $grey10: #FEFEFE;
 $grey20: #E0E0E0;
 $grey80: #BFBFBF;
 $grey90: #101010;
+$white: #FFF;
 
 // @author Hugo Giraudel
 @mixin prefix($property, $value, $prefixes: ()) {
@@ -21,11 +22,16 @@ body {
     background-color: $green20;
     color: $green80;
     font-family:'Rubik', sans-serif;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 1em;
     width: 100vw;
     min-height: 100vh;
+    padding: 0; margin: 0;
     display: flex;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
 }
 
 section {
@@ -47,5 +53,23 @@ input[type="number"] {
     &:focus {
         outline: 0;
         border-color: $grey90;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.button {
+    padding: 1em;
+    background-color: $grey20;
+    color: $grey90;
+    width: 80vw;
+    text-align: center;
+    margin: 1em;
+
+    &:active {
+        background-color: $green80;
+        color: $white;
     }
 }

@@ -5,6 +5,13 @@ var validator = require('validator');
 var Form = require('../model/Form');
 var SlackForm = require('../model/Slack');
 var GSheets = require('../lib/GSheets.js');
+var Slack = require('slack-node');
+
+// Slack variables /////////////////////////////////////////////////////////////
+apiToken = "xoxp-6044688833-12166237076-113973626977-df04fa1f1e599daf39e9a0d9ab77ec28"
+slack = new Slack(apiToken)
+
+
 
 // GSheets implementation
 var recordWriter;
@@ -23,8 +30,7 @@ function OnReady(expenseSheet) {
         range: 'A1:D1',
         valueFormat: ['${first_name}', '${last_name}', '${email}', '${cost}'],
         majorDimension: 'ROWS'
-    });
-    console.log('GSheet Ready!');
+    })
 }
 // end GSheets implementation
 
@@ -32,66 +38,59 @@ function OnReady(expenseSheet) {
 
 // GET index.html
 router.get('/', function(req, res) {
-  var id = req.query.i;
-  var schema = SlackForm.findById(id, function(err, form) {
-      if(form == null) {
-        res.render('404');
-      } else {
-        res.render('expense', { title: 'Expense', form });
-      }
-  });
-});
+    // var id = req.query.i;
+    var form = { first_name: 'Boaty', last_name: 'McBoatface', user_name: 'boaty-mcboatface' }
+    res.render('expense', { title: 'Expense', form })
+})
 
 // POST form data
-router.post('/', function(req, res) {
-    var form = new Form();
-    var body = req.body;
+router.post('/submit', function(req, res) {
+    var form = new Form()
+    var body = req.body
 
-    form.first_name = body.first_name;
-    form.last_name = body.last_name;
-    form.email = body.email;
-    form.cost = body.value;
+    form.first_name = body.first_name
+    form.last_name = body.last_name
+    form.cost = body.value
 
-    if(!validator.isEmail(form.email)) {
-        res.render('expense', { form, title: 'Expense', error: 'Please enter a valid email.' });
-        return;
-    } else if(!validator.isAlpha(form.first_name) || !validator.isAlpha(form.last_name) ||
-        form.cost.length == 0 || form.email.length == 0) {
-          res.render('expense', { form, title: 'Expense', error: 'Please fill out all the forms.' });
-          return;
-    } else if(!validator.isCurrency(form.cost)) {
-        res.render('expense', { form, title: 'Expense', error: 'Please enter a valid currency.' });
-        return;
-    }
+    // if(!validator.isEmail(form.email)) {
+    //     res.render('expense', { form, title: 'Expense', error: 'Please enter a valid email.' });
+    //     return;
+    // } else if(!validator.isAlpha(form.first_name) || !validator.isAlpha(form.last_name) ||
+    //     form.cost.length == 0 || form.email.length == 0) {
+    //       res.render('expense', { form, title: 'Expense', error: 'Please fill out all the forms.' });
+    //       return;
+    // } else if(!validator.isCurrency(form.cost)) {
+    //     res.render('expense', { form, title: 'Expense', error: 'Please enter a valid currency.' });
+    //     return;
+    // }
 
     recordWriter.append(form);
 
     console.log('debug state: ' + mongoose.connection.readyState);
-    res.render('index', { title: 'Expense', message: 'Success! Form Sent!' });
-});
+    // Micah: you gotta add some sort of error responding stuff pls
+    // res.status('500').send('Something broke!')
+})
+
 
 // POST slack
-router.post('/slack', function(req, res) {
-  var schema = new SlackForm();
-  var body = req.body;
-  var link = 'http://localhost:3000/expense/?i=';// req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+router.post('/', function(req, res) {
+    // var schema = new SlackForm();
+    // var body = req.body;
+    var link = 'http://localhost:3000/expense/'
+    var username = req.body.username
+    var first_name = "BOATY"
+    var last_name = "MCBOATFACE"
 
-  schema.user_name = body.user_name;
-	schema.first_name = body.first_name;
-  schema.last_name = body.last_name;
-  schema.email = body.email;
-  schema.cost = body.value;
-  schema.phone_number = body.phone_number;
-  schema.link = link + schema._id;
+    // TODO: does this person exist code here
+    // if they do not exist, then do:
+        var message = first_name + " " + last_name + " is new, and wants to submit a reimbursement request, but hasn't filled out a 204 yet. You should message them at @" + username
+        // TODO: post in #finance, here's the link: // WEBOOK URL = "https://hooks.slack.com/services/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"
+        slack.api("users.list", function(err, response) { console.log(response) })
+    // End TODO.
 
-  schema.save(function(err) {
-    if(err) {
-      res.status(404).render('404');
-    } else {
-      res.json(schema.link);
-    }
-  });
-
-});
+    var form = { first_name: first_name, last_name: last_name, user_name: username }
+    console.log(form)
+    res.render('expense', { title: 'Expense', form })
+})
 
 module.exports = router;

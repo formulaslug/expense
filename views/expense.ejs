@@ -2,6 +2,9 @@
 <html>
 
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="stylesheets/style.css" rel="stylesheet">
     <title>expense</title>
 </head>
@@ -11,37 +14,58 @@
         <h1><%= title %></h1>
         <% if (locals.form.first_name) { %>
             <h2>
-              Hi <%= locals.form.first_name %>!
-              <% if (locals.form.user_name) { %>
-                  @<%= locals.form.user_name %>
-              <% } %>
+              <% if (locals.form.user_name) {%>@<%=locals.form.user_name%><%}%>
             </h2>
         <% } %>
         <% if (locals.error) { %>
             <p><%= locals.error %></p>
         <% } %>
-        <form action="http://localhost:3000/expense/" method="post">
-            First Name: <input type="text" name="first_name"
-            <% if (locals.form.first_name) { %>
-                value="<%= locals.form.first_name %>"
-            <% } %>><br>
-            Last Name: <input type="text" name="last_name"
-            <% if (locals.form.last_name) { %>
-                value="<%= locals.form.last_name %>"
-            <% } %>><br>
-            Email: <input type="text" name="email"
-            <% if (locals.form.email) { %>
-                value="<%= locals.form.email %>"
-            <% } %>><br>
-            Value: <input type="text" name="value"
-            <% if (locals.form.value) { %>
-                value="<%= locals.form.value %>"
-            <% } %>><br>
-            <input type="submit" value="Submit">
-        </form>
+
+        <section>
+            <!-- <form action="http://localhost:3000/expense/" method="post"> -->
+            <article id="receipt1">
+                <!-- Hidden form elements -->
+                <input type="text" name="first_name" class="hidden"
+                <% if (locals.form.first_name) { %>
+                    value="<%= locals.form.first_name %>"
+                <% } %>>
+                <input type="text" name="last_name" class="hidden"
+                <% if (locals.form.last_name) { %>
+                    value="<%= locals.form.last_name %>"
+                <% } %>>
+
+                <p>Howdy <%= locals.form.first_name %>! Thanks for using /expense! We'll try and make this process as quick as possible, so you can get back to building a dank car.</p>
+
+                Value: <input type="text" name="value"
+                <% if (locals.form.value) { %>
+                    value="<%= locals.form.value %>"
+                <% } %>><br>
+                <div class="button" id="submit-button" onclick="sendRequest('receipt1')">Submit</div>
+            <!-- </form> -->
+        </section>
     </div>
     <div class="footer">
     </div>
 </body>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    function sendRequest(form_id) {
+        var first_name = $("#" + form_id + "  input[name=first_name]").val()
+        var last_name  = $("#" + form_id + "  input[name=last_name]").val()
+        var value      = $("#" + form_id + "  input[name=value]").val()
+
+        $.ajax({
+            data: {'first_name': first_name, 'last_name': last_name, 'value': value },
+            dataType: 'json',
+            type: 'POST',
+            url: 'http://localhost:3000/expense/submit/'
+        }).done(function() {
+            // TODO: run handler function to remove receipts and provide summary
+        }).fail(function() {
+            // TODO: figure out a way to return an error in a way that isn't bs
+        })
+    }
+</script>
 
 </html>
