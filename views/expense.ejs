@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="stylesheets/style.css" rel="stylesheet">
-    <title>expense</title>
+    <title>/expense</title>
 </head>
 
 <body>
@@ -22,7 +22,6 @@
         <% } %>
 
         <section>
-            <!-- <form action="http://localhost:3000/expense/" method="post"> -->
             <article id="receipt1">
                 <!-- Hidden form elements -->
                 <input type="text" name="first_name" class="hidden"
@@ -34,14 +33,28 @@
                     value="<%= locals.form.last_name %>"
                 <% } %>>
 
-                <p>Howdy <%= locals.form.first_name %>! Thanks for using /expense! We'll try and make this process as quick as possible, so you can get back to building a dank car.</p>
+                <p>
+                    Howdy <%= locals.form.first_name %>! Thanks for using
+                    <span class="greentext">/expense</span>! We'll try and make
+                    this process as quick as possible. If you have any
+                    questions, drop a message into
+                    <span class="greentext">#finance</span>, and someone will
+                    give you a hand.
+                </p>
 
-                Value: <input type="text" name="value"
-                <% if (locals.form.value) { %>
-                    value="<%= locals.form.value %>"
-                <% } %>><br>
-                <div class="button" id="submit-button" onclick="sendRequest('receipt1')">Submit</div>
-            <!-- </form> -->
+                <input type="text" name="value" class="calendar" onfocusout="checkForContent(this)"
+                    <%if(locals.form.value){%>value="<%=locals.form.value%>"<%}%>
+                    placeholder="When did you make this purchase?">
+
+                <textarea type="text" name="items" class="big-box" placeholder="What did you buy? (ex: immovable rod, 13 mass spectrometers, a tesseract, bag of holding, and 23 bottles of mineral water)" onfocusout="checkForContent(this)"></textarea>
+                <input type="text" name="purchased-from" class="purchased-from" onfocusout="checkForContent(this)"
+                    placeholder="Who'd you buy this from?">
+                <div class="helper-text">> One receipt only, please!</div>
+                <input type="text" name="department" class="department" onfocusout="checkForContent(this)"
+                    placeholder="What department was this for?">
+                <input type="text" name="category" class="category" onfocusout="checkForContent(this)"
+                    placeholder="Pick a purchase category">
+                <div class="button green" id="submit-button" onclick="sendRequest('receipt1')">Submit</div>
         </section>
     </div>
     <div class="footer">
@@ -65,6 +78,10 @@
         }).fail(function() {
             // TODO: figure out a way to return an error in a way that isn't bs
         })
+    }
+
+    function checkForContent(e) {
+        if ($(e).val() != "") $(e).addClass('filled')
     }
 </script>
 

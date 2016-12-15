@@ -1,9 +1,9 @@
 <svg width="16" height="18" viewBox="0 0 16 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:figma="http://www.figma.com/figma/ns">
 <title>Vector 8</title>
 <desc>Created using Figma</desc>
-<g id="Canvas" transform="translate(3449 1710)" figma:type="canvas">
+<g id="Canvas" transform="translate(-530 -516)" figma:type="canvas">
 <g id="Vector 8" style="mix-blend-mode:normal;" figma:type="vector">
-<use xlink:href="#path0_stroke" transform="translate(-3449 -1709)" fill="#101010" style="mix-blend-mode:normal;"/>
+<use xlink:href="#path0_stroke" transform="translate(530 517)" fill="#E0E0E0" style="mix-blend-mode:normal;"/>
 </g>
 </g>
 <defs>

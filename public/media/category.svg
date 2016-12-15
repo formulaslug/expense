@@ -1,10 +1,10 @@
 <svg width="17" height="18" viewBox="0 0 17 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:figma="http://www.figma.com/figma/ns">
 <title>Vector 3</title>
 <desc>Created using Figma</desc>
-<g id="Canvas" transform="translate(3450 1735)" figma:type="canvas">
+<g id="Canvas" transform="translate(-529 -428)" figma:type="canvas">
 <g id="Vector 3" style="mix-blend-mode:normal;" figma:type="vector">
-<use xlink:href="#path0_fill" transform="translate(-3449 -1734)" fill="#E0E0E0" style="mix-blend-mode:normal;"/>
-<use xlink:href="#path1_stroke" transform="translate(-3449 -1734)" fill="#101010" style="mix-blend-mode:normal;"/>
+<use xlink:href="#path0_fill" transform="translate(530 429)" fill="#E0E0E0" style="mix-blend-mode:normal;"/>
+<use xlink:href="#path1_stroke" transform="translate(530 429)" fill="#E0E0E0" style="mix-blend-mode:normal;"/>
 </g>
 </g>
 <defs>
