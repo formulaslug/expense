@@ -5,15 +5,9 @@ var validator = require('validator');
 var Form = require('../model/Form');
 var SlackForm = require('../model/Slack');
 var GSheets = require('../lib/GSheets.js');
-var Slack = require('slack-node');
+var Slack = require('../lib/Slack.js');
 
-// Slack variables /////////////////////////////////////////////////////////////
-apiToken = "xoxp-6044688833-12166237076-113973626977-df04fa1f1e599daf39e9a0d9ab77ec28"
-slack = new Slack(apiToken)
-
-
-
-// GSheets implementation
+// start gSheets
 var recordWriter;
 var gSheets = new GSheets({
     authJSONFile: 'service-account.json',
@@ -32,9 +26,9 @@ function OnReady(expenseSheet) {
         majorDimension: 'ROWS'
     })
 }
-// end GSheets implementation
+// end gSheets
 
-// Router request handlers
+// start router request handler
 
 // GET index.html
 router.get('/', function(req, res) {
@@ -73,24 +67,40 @@ router.post('/submit', function(req, res) {
 
 
 // POST slack
+// TODO: Clean up this POST request with new Slack library. See '../lib/Slack.js'
 router.post('/', function(req, res) {
-    // var schema = new SlackForm();
-    // var body = req.body;
-    var link = 'http://localhost:3000/expense/'
-    var username = req.body.username
-    var first_name = "BOATY"
-    var last_name = "MCBOATFACE"
+    var link = 'http://localhost:3000/expense/';
+    var username = req.body.username;
+    var first_name;
+    var last_name;
+
+    Slack.api("users.list", function(err, response) {
+      for( var key in response.members ) {
+        if (!response.members.hasOwnProperty(key)) continue;
+        var user_obj = response.members[key];
+        var user_name = user_obj.name;
+        if(user_name == username) {
+          first_name = user_obj.real_name.split(" ")[0];
+          last_name = user_obj.real_name.split(" ")[1];
+          console.log(username + ' ' + first_name + ' ' + last_name);
+
+          var form = { first_name: first_name, last_name: last_name, user_name: username };
+          res.render('expense', { title: 'Expense', form });
+          return;
+        }
+      }
+      var error = 'Sorry! Your username was not found on FSAE Slack directory!';
+      res.render('index', { title: 'Expense', message: error});
+    });
 
     // TODO: does this person exist code here
     // if they do not exist, then do:
-        var message = first_name + " " + last_name + " is new, and wants to submit a reimbursement request, but hasn't filled out a 204 yet. You should message them at @" + username
-        // TODO: post in #finance, here's the link: // WEBOOK URL = "https://hooks.slack.com/services/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"
-        slack.api("users.list", function(err, response) { console.log(response) })
+    // var message = first_name + " " + last_name + " is new, and wants to submit a reimbursement request, but hasn't filled out a 204 yet. You should message them at @" + username
+    // TODO: post in #finance, here's the link: // WEBOOK URL = "https://hooks.slack.com/services/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"
     // End TODO.
-
-    var form = { first_name: first_name, last_name: last_name, user_name: username }
-    console.log(form)
-    res.render('expense', { title: 'Expense', form })
+    // res.render('index', { title: 'Expense', error: 'user not found' });
 })
+
+// end router request handler
 
 module.exports = router;
