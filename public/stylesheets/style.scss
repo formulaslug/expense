@@ -60,7 +60,7 @@ input[type="number"], textarea {
     @include prefix(appearance, none, webkit moz);
     @include prefix(box-sizing, border-box, webkit moz);
     @include ease(60ms);
-    font: normal normal 400 1em 'Open Sans', serif;
+    font: normal normal 400 1em 'Rubik', serif;
     padding: 0.5em 5vw;
     margin: 0.5em 0;
     width: 90vw;
@@ -115,6 +115,7 @@ input[type="number"], textarea {
 }
 
 textarea {
+  resize: none;
     height: 10em;
 }
 

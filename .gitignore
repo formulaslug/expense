@@ -4,6 +4,8 @@ service-account.json
 # For Slack auth codes (get them from the #finance channel)
 slack-auth
 
+service-account.json
+
 # SCSS
 .sass-cache/
 *.css.map
