@@ -2,12 +2,12 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var validator = require('validator');
-var Form = require('../model/Form');
+var ExpenseForm = require('../model/ExpenseForm');
 var SlackForm = require('../model/Slack');
 var GSheets = require('../lib/GSheets.js');
 var Slack = require('../lib/Slack.js');
 
-// start gSheets
+/** Google Sheets */
 var recordWriter;
 var gSheets = new GSheets({
     authJSONFile: 'service-account.json',
@@ -21,76 +21,107 @@ gSheets.on('error', function(err) {
 
 function OnReady(expenseSheet) {
     recordWriter = expenseSheet.getTableWriter({
-        range: 'A1:D1',
-        valueFormat: ['${first_name}', '${last_name}', '${email}', '${cost}'],
+        range: 'A1:H1',
+        valueFormat: ['${first_name}',
+                      '${last_name}',
+                      '${email}',
+                      '${date}',
+                      '${purchase_date}',
+                      '${item_description}',
+                      '${supplier}',
+                      '${department}',
+                      '${category}'
+                    ],
         majorDimension: 'ROWS'
     })
 }
-// end gSheets
+/** end Google Sheets */
 
-// start router request handler
+/** Request Handler */
 
-// GET index.html
+/**
+ * Router will redirect user back to root if user submits
+ * request without valid input data.
+ *
+ * GET index.html
+ * URL root/expense/
+ */
 router.get('/', function(req, res) {
-    // var id = req.query.i;
-    var form = { first_name: 'Boaty', last_name: 'McBoatface', user_name: 'boaty-mcboatface' }
-    res.render('expense', { title: 'Expense', form })
+    res.redirect('../');
 })
 
-// POST form data
+/**
+ * Called when a user submits a request with valid purchase form to /expense/submit/.
+ * It will read data and write it to Google Sheets, and a PDF.
+ *
+ * Will direct user to a page verifying that the form has been sent, or
+ * asks the user to check his form for an invalid submission.
+ *
+ * POST Expense Form
+ * URL root/expense/submit/
+ */
 router.post('/submit', function(req, res) {
-    var form = new Form()
-    var body = req.body
+    var form = new ExpenseForm();
+    var body = req.body;
+    console.log('sent');
 
-    form.first_name = body.first_name
-    form.last_name = body.last_name
-    form.cost = body.value
+    form.first_name = body.first_name;
+    form.last_name = body.last_name;
+    form.email = body.email;
+    form.date = body.date;
+    form.purchase_date = body.purchase_date;
+    form.item_description = body.item_description;
+    form.supplier = body.supplier;
+    form.department = body.department;
+    form.category = body.category;
 
-    // if(!validator.isEmail(form.email)) {
-    //     res.render('expense', { form, title: 'Expense', error: 'Please enter a valid email.' });
-    //     return;
-    // } else if(!validator.isAlpha(form.first_name) || !validator.isAlpha(form.last_name) ||
-    //     form.cost.length == 0 || form.email.length == 0) {
-    //       res.render('expense', { form, title: 'Expense', error: 'Please fill out all the forms.' });
-    //       return;
-    // } else if(!validator.isCurrency(form.cost)) {
-    //     res.render('expense', { form, title: 'Expense', error: 'Please enter a valid currency.' });
-    //     return;
-    // }
-
+    /** Micah: Error Catch i.e: Something broke! */
     recordWriter.append(form);
-
-    console.log('debug state: ' + mongoose.connection.readyState);
-    // Micah: you gotta add some sort of error responding stuff pls
-    // res.status('500').send('Something broke!')
+    res.json('Maybe success?');
 })
 
 
-// POST slack
-// TODO: Clean up this POST request with new Slack library. See '../lib/Slack.js'
+/**
+ * Called when a user submits a request with their slack username.
+ * Will send user the expense form if they have a valid slack username,
+ * otherwise it'll tell the user to try and submit their username again.
+ *
+ * POST Username Submission
+ * URL root/expense/
+ * @type {String}
+ */
 router.post('/', function(req, res) {
-    var link = 'http://localhost:3000/expense/';
     var username = req.body.username;
-    var first_name;
-    var last_name;
 
-    Slack.api("users.list", function(err, response) {
-      for( var key in response.members ) {
-        if (!response.members.hasOwnProperty(key)) continue;
-        var user_obj = response.members[key];
-        var user_name = user_obj.name;
-        if(user_name == username) {
-          first_name = user_obj.real_name.split(" ")[0];
-          last_name = user_obj.real_name.split(" ")[1];
-          console.log(username + ' ' + first_name + ' ' + last_name);
-
-          var form = { first_name: first_name, last_name: last_name, user_name: username };
-          res.render('expense', { title: 'Expense', form });
-          return;
+    Slack.getUser(username, function(user) {
+        // If username is not found.
+        if (user.code && user.code == 404) {
+            var error = 'Sorry! Your username was not found on FSAE Slack directory!';
+            res.render('index', {
+                'message': error
+            });
+            return;
         }
-      }
-      var error = 'Sorry! Your username was not found on FSAE Slack directory!';
-      res.render('index', { title: 'Expense', message: error});
+
+        // Checks if the user has filled out the 204 form.
+        SlackForm.findOne(user, function(err, form) {
+            if (err) {
+                res.send(err);
+            }
+
+            // Checks if user has filled out a 204 form.
+            // if (!form) {
+            //     error = 'Hey ' + user.first_name + '! You need to fill out a 204 form to use this tool!. Go to #finance';
+            //     res.render('index', {
+            //         'message': error
+            //     });
+            //     return;
+            // }
+            //
+            // If the username checks out and has filled out the 204 form, step 2!
+            res.render('expense', user);
+            return;
+        });
     });
 
     // TODO: does this person exist code here
@@ -98,7 +129,6 @@ router.post('/', function(req, res) {
     // var message = first_name + " " + last_name + " is new, and wants to submit a reimbursement request, but hasn't filled out a 204 yet. You should message them at @" + username
     // TODO: post in #finance, here's the link: // WEBOOK URL = "https://hooks.slack.com/services/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"
     // End TODO.
-    // res.render('index', { title: 'Expense', error: 'user not found' });
 })
 
 // end router request handler

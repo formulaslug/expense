@@ -11,10 +11,10 @@
 
 <body>
     <div class="form">
-        <h1><%= title %></h1>
-        <% if (locals.form.first_name) { %>
+        <h1>Expense</h1>
+        <% if (locals.first_name) { %>
             <h2>
-              <% if (locals.form.user_name) {%>@<%=locals.form.user_name%><%}%>
+              <% if (locals.username) {%>@<%=locals.username%><%}%>
             </h2>
         <% } %>
         <% if (locals.error) { %>
@@ -25,16 +25,20 @@
             <article id="receipt1">
                 <!-- Hidden form elements -->
                 <input type="text" name="first_name" class="hidden"
-                <% if (locals.form.first_name) { %>
-                    value="<%= locals.form.first_name %>"
+                <% if (locals.first_name) { %>
+                    value="<%= locals.first_name %>"
                 <% } %>>
                 <input type="text" name="last_name" class="hidden"
-                <% if (locals.form.last_name) { %>
-                    value="<%= locals.form.last_name %>"
+                <% if (locals.last_name) { %>
+                    value="<%= locals.last_name %>"
+                <% } %>>
+                <input type="text" name="email" class="hidden"
+                <% if (locals.email) { %>
+                    value="<%= locals.email %>"
                 <% } %>>
 
                 <p>
-                    Howdy <%= locals.form.first_name %>! Thanks for using
+                    Howdy <%= locals.first_name %>! Thanks for using
                     <span class="greentext">/expense</span>! We'll try and make
                     this process as quick as possible. If you have any
                     questions, drop a message into
@@ -42,9 +46,7 @@
                     give you a hand.
                 </p>
 
-                <input type="text" name="value" class="calendar" onfocusout="checkForContent(this)"
-                    <%if(locals.form.value){%>value="<%=locals.form.value%>"<%}%>
-                    placeholder="When did you make this purchase?">
+                <input type="text" name="date" class="calendar" onfocusout="checkForContent(this)" placeholder="When did you make this purchase?">
 
                 <textarea type="text" name="items" class="big-box" placeholder="What did you buy? (ex: immovable rod, 13 mass spectrometers, a tesseract, bag of holding, and 23 bottles of mineral water)" onfocusout="checkForContent(this)"></textarea>
                 <input type="text" name="purchased-from" class="purchased-from" onfocusout="checkForContent(this)"
@@ -65,12 +67,28 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 <script type="text/javascript">
     function sendRequest(form_id) {
-        var first_name = $("#" + form_id + "  input[name=first_name]").val()
-        var last_name  = $("#" + form_id + "  input[name=last_name]").val()
-        var value      = $("#" + form_id + "  input[name=value]").val()
+        var first_name   = $("#" + form_id + "  input[name=first_name]").val()
+        var last_name    = $("#" + form_id + "  input[name=last_name]").val()
+        var email        = $("#" + form_id + "  input[name=email]").val()
+        var currentDate  = new Date();
+        var purchaseDate = $("#" + form_id + "  input[name=date]").val()
+        var item         = $("#" + form_id + "  input[name=items]").val()
+        var supplier     = $("#" + form_id + "  input[name=purchased-from]").val()
+        var department   = $("#" + form_id + "  input[name=department]").val()
+        var category     = $("#" + form_id + "  input[name=category]").val()
 
         $.ajax({
-            data: {'first_name': first_name, 'last_name': last_name, 'value': value },
+            data: {
+              'first_name': first_name,
+              'last_name': last_name,
+              'email': email,
+              'date': currentDate,
+              'purchase_date': purchaseDate,
+              'item_description': item,
+              'supplier': supplier,
+              'department': department,
+              'category': category
+            },
             dataType: 'json',
             type: 'POST',
             url: 'http://localhost:3000/expense/submit/'
