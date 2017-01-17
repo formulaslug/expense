@@ -7,21 +7,16 @@
 </head>
 
 <body>
-    <div class="banner">
-        <h1>Expense Tracker</h1>
+  <h1>Welcome to /expense</h1>
 
-        <% if (locals.message) { %>
-        <p><%= locals.message %></p>
-        <% } %>
+  <% if (locals.message) { %>
+  <p><%= locals.message %></p>
+  <% } %>
 
-        <form action="http://localhost:3000/expense/" method="post">
-            <input type="text" name="username" placeholder="@your-username">
-            <input type="submit" value="Request">
-        </form>
-    </div>
-
-    <div class="footer">
-    </div>
+  <form action="http://localhost:3000/expense/" method="post" id="f">
+      <input type="text" name="username" placeholder="@your-username">
+      <div class="button" onclick="document.getElementById('f').submit()">That's me!</div>
+  </form>
 </body>
 
 <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">

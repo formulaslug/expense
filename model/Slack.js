@@ -8,4 +8,4 @@ var SlackSchema = mongoose.Schema({
   	email: String
 })
 
-module.exports = mongoose.model('Slack', SlackSchema);
+module.exports = mongoose.model('Slack', SlackSchema)
