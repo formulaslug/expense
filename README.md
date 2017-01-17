@@ -4,12 +4,15 @@ The #finance team's expense tracking tool.
 ## Getting Started
 We use MongoDB and a REST API. Here's how to get that working:
 
-1. Install [Node JS](https://nodejs.org/en/download/) and [MongoDB](https://www.mongodb.com/download-center?jmp=nav)
-2. Start MongoDB `mongod -dbpath db` (or `./mongod` on mac, assuming you're in your `mongo/bin/` directory)
+1. Go download `slack-auth` and `service-account.json` from #finance, and put both files in your root project directory.
+2. Install [Node JS](https://nodejs.org/en/download/) and [MongoDB](https://www.mongodb.com/download-center?jmp=nav)
+3. Start MongoDB `mongod -dbpath db` (or `./mongod` on mac, assuming you're in your `mongo/bin/` directory)
 
 Then, in the app directory...
-3. `npm install`
-4. `node bin/www`
+4. `npm install`
+5. `node bin/www`
+
+From there, you can access the app by going to `localhost:300`. Happy expensing!
 
 
 ## Understanding the Problem
