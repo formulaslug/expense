@@ -1,0 +1,51 @@
+@import 'vars';
+//
+// .characterWrapper {
+//   min-width: 100vw;
+//   position: relative;
+// }
+//
+// a {
+//   text-decoration: none;
+//   font-weight: inherit;
+//   color: inherit;
+// }
+//
+// nav {
+//   position: fixed;
+//   bottom: 0;
+//   left: 0;
+//   width: 100vw;
+//   height: 3.5em;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   margin: 0 auto;
+//   padding: 0;
+//   z-index: 100;
+//   @include box-shadow(-16px, 0, 16px, 16px, rgba($black, 0.05))
+//   border-top: 1px solid rgba($grey, 0.2);
+//
+//   > a {
+//     text-decoration: none;
+//     text-align: center;
+//     font-size: 0.7em;
+//     margin: 0 0.5em;
+//     text-transform: uppercase;
+//     flex-grow: 1;
+//     white-space:nowrap;
+//
+//     > div {
+//       opacity: 0.5;
+//       transform: translateY(-0.2em);
+//     }
+//
+//     &.route--active {
+//       > div { opacity: 1; }
+//     }
+//
+//     > img {
+//       height: 3em
+//     }
+//   }
+// }

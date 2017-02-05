@@ -1,0 +1,13 @@
+# Check it out: http://humanstxt.org/
+
+# TEAM
+
+    Formula Slug, Finance
+    William Xu
+    Micah Duron
+    Baiwen Huang
+    Alex Price
+
+# THANKS
+
+    React-Redux Starter Kit - https://github.com/davezuko/react-redux-starter-kit
