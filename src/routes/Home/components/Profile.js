@@ -1,5 +1,6 @@
 import React from 'react'
 import './Profile.scss'
+import { Link } from 'react-router'
 
 function signOut (firebase) {
   console.log('%cSigning out...', 'color: dodgerblue')
@@ -15,7 +16,7 @@ export const Profile = (props) => (
         <div onClick={() => signOut(props.firebase)} className='link subtext'>Logout</div>
       </nav>
 
-      <p>Make sure the saved data we have below is accurate—we use this to fill out expense forms for you.</p>
+      <p>Hey {props.displayName}, make sure the saved data we have below is accurate—we use this to fill out expense forms for you.</p>
       <p className='subtext'>
         Need help? Post in <a href='https://fsae.slack.com/messages/finance/' className='link'>#finance</a>.
       </p>
@@ -48,7 +49,7 @@ export const Profile = (props) => (
       </div>
     </div>
 
-    <div className='button' onClick={() => console.log('Filing a new report!')}>File a new expense report</div>
+    <Link to='/expense' className='button'>File a new expense report</Link>
   </div>
 )
 

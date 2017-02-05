@@ -2,7 +2,6 @@ import React from 'react'
 import './Home.scss'
 import Profile from './Profile.js'
 import SignIn from './SignIn.js'
-// import { Link } from 'react-router'
 import * as firebase from 'firebase'
 
 if (!firebase.apps.length) {
@@ -33,11 +32,9 @@ function checkForUser (props) {
       }
     })
   }).then(res => {
-    console.log(res)
     if (!props.userData.uid) props.setUserData(res)
   }).catch(res => {
     console.log('%cUser is not signed in.', 'color: dodgerblue')
-    console.log(res)
   })
 }
 
@@ -48,7 +45,13 @@ function getWelcomeMessage () {
         <h1>/expense</h1>
         <p>An easier way to file expense reports at Formula Slug.</p>
         <p className='subtext'>
-          Not a member of Formula Slug? Email us at team@formulaslug.com, or check out our website.
+          Not a member of Formula Slug?
+          <br /><br />
+          We're a sustainable engineering organization at UCSC, working on
+          electric racecars, solar power, transportation, and more.
+          <br /><br />
+          &#62; <a href='mailto:team@formulaslug.com' title='Email the team'>
+          team@formulaslug.com</a>
         </p>
       </div>
 

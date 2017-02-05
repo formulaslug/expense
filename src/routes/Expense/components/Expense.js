@@ -1,8 +1,7 @@
 import React from 'react'
 import './Expense.scss'
 // import CharacterDashboard from './CharacterDashboard'
-import * as firebase from 'firebase'
-
+// import * as firebase from 'firebase'
 
 // if (!firebase.apps.length) {
 //   console.log('%cCreating a new firebase instance...', "color: grey; font-style: italic;padding: 2px")
@@ -15,7 +14,6 @@ import * as firebase from 'firebase'
 //   }
 //   firebase.initializeApp(config)
 // }
-
 
 // Get character data
 // function checkForUser(props) {
@@ -35,22 +33,11 @@ import * as firebase from 'firebase'
 //   })
 // }
 
-
-// export const Character = (props) => (
-//   <div className='characterWrapper'>
-//     { console.log(props) }
-//     { (props.character.uid) ?
-//       <CharacterDashboard metadata={{
-//         uid: props.character.uid,
-//         character: props.character.character,
-//         firebase,
-//         sectionKey: props.params.section,
-//         characterKey: props.params.characterName,
-//         pathname: props.location.pathname
-//       }} /> :
-//       checkForUser(props)
-//     }
-//   </div>
-// )
+export const Expense = (props) => (
+  <div>
+    { console.log(props) }
+    FILE YOUR EXPENSE REPORT HERE 100% FREE.
+  </div>
+)
 
 export default Expense

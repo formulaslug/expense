@@ -1,7 +1,7 @@
 import { injectReducer } from '../../store/reducers'
 
 export default (store) => ({
-  path: 'expense/:section',
+  path: 'expense',
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
       const Expense = require('./containers/ExpenseContainer').default
