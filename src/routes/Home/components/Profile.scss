@@ -1,0 +1,43 @@
+@import 'vars';
+
+header {
+  padding: 2em 1.5em 0 1.5em;
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.savedData {
+  box-sizing: border-box;
+  margin: 1em 1.5em;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  .row {
+    width: 100%;
+    padding: 0.5em 0;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $grey90;
+
+    > .key {
+      text-transform: uppercase;
+      color: $grey60;
+    }
+  }
+}
+
+.page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .button {
+  }
+}

@@ -8,7 +8,7 @@ function authLink (firebase) {
 }
 
 export const SignIn = (props) => (
-  <div className='button' onClick={() => authLink(props.metadata.firebase)}>Sign In</div>
+  <div className='button' onClick={() => authLink(props.firebase)}>Sign In</div>
 )
 
 export default SignIn

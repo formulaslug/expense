@@ -1,6 +1,6 @@
 import React from 'react'
 import './Home.scss'
-import HomeMenu from './HomeMenu.js'
+import Profile from './Profile.js'
 import SignIn from './SignIn.js'
 // import { Link } from 'react-router'
 import * as firebase from 'firebase'
@@ -41,27 +41,26 @@ function checkForUser (props) {
   })
 }
 
-function signOut (firebase) {
-  console.log('%cSigning out...', 'color: dodgerblue')
-  firebase.auth().signOut()
-  return window.location.reload(true)
+function getWelcomeMessage () {
+  return (
+    <div className='home'>
+      <div className='intro'>
+        <h1>/expense</h1>
+        <p>An easier way to file expense reports at Formula Slug.</p>
+        <p className='subtext'>
+          Not a member of Formula Slug? Email us at team@formulaslug.com, or check out our website.
+        </p>
+      </div>
+
+      <SignIn firebase={firebase} />
+    </div>
+  )
 }
 
 export const Home = (props) => (
-  <div className='home'>
+  <div>
     { console.log('%cRendering home...', 'color: grey; font-style: italic;padding: 2px') }
-
-    <div className='intro'>
-      <h1>/expense</h1>
-      <p>An easier way to file expense reports at Formula Slug.</p>
-      <p className='subtext'>
-        Not a member of Formula Slug? Email us at team@formulaslug.com, or check out our website.
-      </p>
-    </div>
-    
-    <div onClick={() => signOut(props.metadata.firebase)}>Logout</div>
-
-    { (props.userData.uid) ? <HomeMenu metadata={{displayName: props.userData.displayName, uid: props.userData.uid, firebase}} /> : <SignIn metadata={{firebase: firebase}} />}
+    { (!props.userData.uid) ? getWelcomeMessage() : <Profile displayName={props.userData.displayName} uid={props.userData.uid} firebase={firebase} /> }
     { (!props.userData.uid) ? checkForUser(props) : null }
   </div>
 )

@@ -10,7 +10,7 @@ body {
 }
 
 .button {
-  margin: 5vw 1.5em;
+  margin: 1.5em;
   background-color: $white;
   color: $black;
   text-align: center;
@@ -20,3 +20,16 @@ body {
 
   @include box-shadow(0, 0, 8px, 0, rgba($black, 0.2))
 }
+
+h1 {
+  font-size: 2em;
+  font-weight: normal;
+}
+
+.link {
+  text-decoration: underline;
+  cursor: pointer;
+  color: inherit;
+}
+
+.subtext { opacity: 0.5; }
