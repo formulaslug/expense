@@ -7,11 +7,11 @@ class Profile extends Component {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      legalName: null,
-      ucscEmail: null,
-      phone: null,
-      address: null,
-      ssn: null,
+      legalName: '...',
+      ucscEmail: '...',
+      phone: '...',
+      address: ['...'],
+      ssn: '...',
       payeeSetupSubmitted: false
     }
   }
@@ -65,10 +65,17 @@ class Profile extends Component {
     return res
   }
 
+  formatPhoneNumber (s) { // http://stackoverflow.com/a/8358141/6037036
+    if (s === '...') return s
+    let s2 = ('' + s).replace(/\D/g, '')
+    let m = s2.match(/^(\d{3})(\d{3})(\d{4})$/)
+    return (!m) ? null : m[1] + '.' + m[2] + '.' + m[3]
+  }
+
   render () {
     return (
       <div className='page'>
-        { (this.state.legalName === null) ? this.getSavedData(this.props) : console.log(this.state.legalName) }
+        { (this.state.legalName === '...') ? this.getSavedData(this.props) : console.log(this.state.legalName) }
         <header>
           <nav>
             <h1>/expense</h1>
@@ -97,7 +104,7 @@ class Profile extends Component {
           </div>
           <div className='row'>
             <div className='key'>Phone</div>
-            <div className='value'>{ this.state.phone }</div>
+            <div className='value'>{ this.formatPhoneNumber(this.state.phone) }</div>
           </div>
           <div className='row'>
             <div className='key'>Address</div>
