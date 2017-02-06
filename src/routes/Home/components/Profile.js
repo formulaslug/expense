@@ -16,6 +16,19 @@ class Profile extends Component {
     }
   }
 
+  ajax (url, data) {
+    data = (data === undefined) ? null : data
+
+    return new Promise((resolve, reject) => {
+      let req = new XMLHttpRequest()
+      req.onload = () => { resolve(this.responseText) }
+      req.onerror = reject
+      req.open('POST', url, true)
+      req.setRequestHeader('Content-Type', 'Application/JSON')
+      req.send(data)
+    })
+  }
+
   signOut (firebase) {
     console.log('%cSigning out...', 'color: dodgerblue')
     firebase.auth().signOut()
@@ -23,7 +36,25 @@ class Profile extends Component {
   }
 
   getSavedData (props) {
+    let db = props.firebase.database()
 
+    db.ref('/users/' + props.uid).once('value').then((snapshot) => {
+      let legalName = snapshot.val()['legalName']
+      let ucscEmail = snapshot.val()['ucscEmail']
+      let phone = snapshot.val()['phone']
+      let address = snapshot.val()['address'].split('\\n')
+      let payeeSetupSubmitted = snapshot.val()['payeeSetupSubmitted']
+      let ssn = '**' + JSON.stringify(snapshot.val()['SSN']).substring(2, 4)
+
+      this.setState({
+        legalName,
+        ucscEmail,
+        phone,
+        address,
+        payeeSetupSubmitted,
+        ssn
+      })
+    })
   }
 
   payeeSetupSubmitted (submitted) {
@@ -39,10 +70,18 @@ class Profile extends Component {
     }
   }
 
+  formatAddress (address) {
+    let res = []
+    for (let row in address) {
+      res.push(<div className='address' key={'address' + row}>{address[row]}</div>)
+    }
+    return res
+  }
+
   render () {
     return (
       <div className='page'>
-        { this.getSavedData() }
+        { (this.state.legalName === null) ? this.getSavedData(this.props) : console.log(this.state.legalName) }
         <header>
           <nav>
             <h1>/expense</h1>
@@ -75,7 +114,7 @@ class Profile extends Component {
           </div>
           <div className='row'>
             <div className='key'>Address</div>
-            <div className='value'>{ this.state.address }</div>
+            <div className='value'>{ this.formatAddress(this.state.address) }</div>
           </div>
           <div className='row'>
             <div className='key'>SSN</div>
