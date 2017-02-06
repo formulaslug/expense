@@ -28,6 +28,30 @@ header {
       text-transform: uppercase;
       color: $grey60;
     }
+
+    &.err > * {
+       color: $red50;
+
+      &:first-of-type {
+        padding-left: 2em;
+        position: relative;
+
+        &::before {
+          content: '';
+          color: $red50;
+          background-image: url('/warning_icon.png');
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+          position: absolute;
+          left: 0;
+          top: 50%;
+          height: 1em;
+          width: 1em;
+          transform: translateY(-50%);
+        }
+      }
+    }
   }
 }
 
