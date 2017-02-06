@@ -16,19 +16,6 @@ class Profile extends Component {
     }
   }
 
-  ajax (url, data) {
-    data = (data === undefined) ? null : data
-
-    return new Promise((resolve, reject) => {
-      let req = new XMLHttpRequest()
-      req.onload = () => { resolve(this.responseText) }
-      req.onerror = reject
-      req.open('POST', url, true)
-      req.setRequestHeader('Content-Type', 'Application/JSON')
-      req.send(data)
-    })
-  }
-
   signOut (firebase) {
     console.log('%cSigning out...', 'color: dodgerblue')
     firebase.auth().signOut()
@@ -97,7 +84,7 @@ class Profile extends Component {
         <div className='savedData'>
           <div className='row'>
             <div className='key'>Saved data</div>
-            <div className='key'>Edit</div>
+            <div className='key'><Link to='onboarding'>Edit</Link></div>
             {/* TODO: Make that edit button do stuff */}
           </div>
           <div className='row'>

@@ -1,0 +1,270 @@
+@import 'vars';
+
+.sectionContainer {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: -1em;
+  left: 0;
+  overflow: scroll;
+}
+
+section {
+  width: 100vw;
+  padding: 1em 5vw;
+  background-color: $white;
+  color: $black;
+  position: absolute;
+  top: 4em;
+  left: 0;
+  background-image: url('/paper.png');
+
+  > * { margin-top: 2em; }
+}
+
+@-webkit-keyframes slideOutRight { from {
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  } to {
+    visibility: hidden;
+    transform-origin: center;
+    -webkit-transform: translate3d(100vh, 5em, 0) rotate(20deg);
+    transform: translate3d(100vh, 5em, 0) rotate(20deg);
+  }
+}
+@keyframes slideOutRight { from {
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  } to {
+    visibility: hidden;
+    transform-origin: center;
+    -webkit-transform: translate3d(100vh, 5em, 0) rotate(20deg);
+    transform: translate3d(100vh, 5em, 0) rotate(20deg);
+  }
+}
+@-webkit-keyframes slideOutLeft { from {
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  } to {
+    visibility: hidden;
+    transform-origin: center;
+    -webkit-transform: translate3d(-100vh, 5em, 0) rotate(-20deg);
+    transform: translate3d(-100vh, 5em, 0) rotate(-20deg);
+  }
+}
+@keyframes slideOutLeft { from {
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  } to {
+    visibility: hidden;
+    transform-origin: center;
+    -webkit-transform: translate3d(-100vh, 5em, 0) rotate(-20deg);
+    transform: translate3d(-100vh, 5em, 0) rotate(-20deg);
+  }
+}
+@-webkit-keyframes slideInUp { from {
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 100vh, 0) rotate(-5deg) scale(1.4);
+    transform: translate3d(0, 100vh, 0) rotate(-5deg) scale(1.4);
+    visibility: visible;
+  } to {
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes slideInUp { from {
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 100vh, 0) rotate(-5deg) scale(1.4);
+    transform: translate3d(0, 100vh, 0) rotate(-5deg) scale(1.4);
+    visibility: visible;
+  } to {
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.sectionMove-enter, .sectionMove-leave,
+.sectionMoveAlt-enter, .sectionMoveAlt-leave {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.sectionMove-enter.sectionMove-enter-active,
+.sectionMoveAlt-enter.sectionMoveAlt-enter-active  {
+  -webkit-animation-name: slideInUp;
+  animation-name: slideInUp;
+  z-index: 80;
+}
+
+.sectionMove-leave.sectionMove-leave-active {
+  -webkit-animation-name: slideOutRight;
+  animation-name: slideOutRight;
+}
+
+.sectionMoveAlt-leave.sectionMoveAlt-leave-active {
+  -webkit-animation-name: slideOutLeft;
+  animation-name: slideOutLeft;
+}
+
+
+.singleRowTable {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-wrap: nowrap;
+
+  &:not(.noSeps) {
+    background: -moz-linear-gradient(top, rgba($grey,0) 10%, rgba($grey,0.5) 50%, rgba($grey,0) 90%);
+    background: -webkit-linear-gradient(top, rgba($grey,0) 10%,rgba($grey,0.5) 50%,rgba($grey,0) 90%);
+    background: linear-gradient(to bottom, rgba($grey,0) 10%,rgba($grey,0.5) 50%,rgba($grey,0) 90%);
+  }
+
+  > .singleRowTable--column {
+    background-color: $white;
+    background-image: url('/paper.png');
+    flex-grow: 1;
+
+    &:not(:first-of-type) { margin-left: 1px; }
+    &:last-of-type {
+      position: relative;
+
+      &::after {
+        content: '';
+        height: 100%;
+        width: 2px;
+        position: absolute;
+        right: -1px;
+        top: 0;
+        background: $white;
+      }
+    }
+  }
+
+  .singleRowTable--data {
+    font-size: 1.5em;
+    padding: 0.1em 0;
+
+    &.norm { font-size: 1.2em; }
+  }
+
+  .singleRowTable--label {
+    color: $grey;
+    font-weight: 400;
+    font-size: 0.9em;
+    text-transform: uppercase;
+  }
+}
+
+.todoList {
+  list-style: none;
+
+
+  li:before {
+    content: "\2610";
+    margin-right:5px;
+  }
+}
+
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  text-align: center;
+  -webkit-border-horizontal-spacing: 0;
+  -webkit-border-vertical-spacing: 0;
+  border-collapse: collapse;
+
+  td {
+    font-size: 1.2em;
+    border-spacing: 0;
+    text-align: center;
+
+    &:nth-of-type(2n) {
+      background: rgba($grey, 0.05);
+    }
+  }
+
+  tbody tr td.label {
+    text-align: left;
+    // width:1%;
+    white-space:nowrap;
+  }
+
+  th, td.label {
+    padding: 0.6em 0;
+    color: $grey;
+    font-weight: 400;
+    font-size: 0.9em;
+    text-transform: uppercase;
+  }
+
+  .data--zero {
+    color: $grey;
+  }
+}
+
+.todoList {
+  list-style: none;
+
+  li {
+    margin: 0.25em 0;
+    position: relative;
+  }
+
+  li.l2 {
+    margin-left: 2em;
+
+    &:last-of-type {
+      margin-bottom: 1em;
+    }
+  }
+
+  li:before {
+    content: "\2616";
+    margin-right: 0.5em;
+    position: absolute;
+    top: 50%;
+    transform: translate3d(-1.5em, -50%, 0)
+  }
+
+  li.checked:before { content: '\2617'; }
+}
+
+table.skillsTable {
+  background: transparent;
+
+  td:nth-of-type(n) { background: transparent; }
+
+  thead tr {
+    th:nth-of-type(1) { text-align: left; }
+    th:nth-of-type(2) { width: 60%; text-align: left; }
+    th:last-of-type { text-align: right; }
+  }
+
+  tr {
+    td:nth-of-type(1) {
+      text-align: left;
+      overflow: hidden;
+      margin-right: 1em;
+    }
+
+    td:nth-of-type(2) {
+      overflow: hidden;
+      padding-left: 1em;
+    }
+
+    td:last-of-type { text-align: right; }
+    &:nth-of-type(2n) { background-color: rgba($grey, 0.05); }
+  }
+}
+
+span.decorative { color: rgba($grey, 0.25) }
+span.proficiencyIndicator { color: $red; }
