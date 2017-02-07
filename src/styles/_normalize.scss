@@ -37,6 +37,12 @@ textarea
     font-kerning: normal;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* Remove the stupid outer glow in Webkit */
 input:focus
 {
@@ -165,7 +171,10 @@ textarea
 
 select
 {
-
+  outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+  width: auto;
 }
 
 select[multiple]
