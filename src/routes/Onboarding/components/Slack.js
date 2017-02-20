@@ -3,6 +3,18 @@ var request = require('request');
 var promise = require('promise');
 var EventEmitter = require('events').EventEmitter;
 
+// Example
+//
+// var slack = new Slack({
+//     'token': ''
+// });
+//
+// slack.on('ready', function() {
+//   slack.getUser('').then(function(data) {
+//     console.log(data);
+//   });
+// })
+
 class Slack extends EventEmitter {
 
     constructor(params) {
@@ -60,11 +72,4 @@ class Slack extends EventEmitter {
     }
 }
 
-var slack = new Slack({
-    'token': 'xoxp-6044688833-89005245079-117527095396-dc881c9094fcc59c0d896904969f771e'
-});
-slack.on('ready', function() {
-  slack.getUser('williamxu').then(function(data) {
-    console.log(data);
-  });
-})
+module.exports = Slack;
