@@ -1,4 +1,3 @@
-var _ = require('lodash'); // https://lodash.com/
 var request = require('request');
 var promise = require('promise');
 var EventEmitter = require('events').EventEmitter;
