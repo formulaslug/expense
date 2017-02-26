@@ -22,6 +22,27 @@ header {
     width: auto;
   }
 
+  ul {
+    padding: 0px;
+    margin: 0px;
+  }
+
+  li {
+    margin-left: 0px;
+    margin: 0 0 10px 0;
+    padding: 8px;
+    display: block;
+    border: 1px solid #fff;
+  }
+
+  li:hover, li:active {
+    background-color: transparentize(#fff, .9);
+  }
+
+  button {
+    color: white;
+  }
+
   .error {
     font-size: 0.8em;
     color: $red50;

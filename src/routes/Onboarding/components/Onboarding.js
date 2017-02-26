@@ -1,37 +1,18 @@
 import React, { Component } from 'react'
 import './Onboarding.scss'
-// import CharacterDashboard from './CharacterDashboard'
-// import * as firebase from 'firebase'
+import * as firebase from 'firebase'
 
-// if (!firebase.apps.length) {
-//   console.log('%cCreating a new firebase instance...', "color: grey; font-style: italic;padding: 2px")
-//   let config = {
-//       apiKey: "AIzaSyCM6-ZkljQSJAIP9GW83urxC3-2ahRwV8M",
-//       authDomain: "playbook-9e0c7.firebaseapp.com",
-//       databaseURL: "https://playbook-9e0c7.firebaseio.com",
-//       storageBucket: "playbook-9e0c7.appspot.com",
-//       messagingSenderId: "41836465090"
-//   }
-//   firebase.initializeApp(config)
-// }
-
-// Get character data
-// function checkForUser(props) {
-//   new Promise((resolve, reject) => {
-//     firebase.auth().onAuthStateChanged(user => {
-//       if (user) {
-//         let uid = user.uid
-//         resolve(uid, props.params.characterName)
-//       } else {
-//         reject(console.warn('User DNE'))
-//       }
-//     })
-//   }).then( uid => {
-//     if (!props.character.uid) props.importCharacter(uid, props.params.characterName)
-//   }).catch( res => {
-//     console.log('User is not signed in.', res)
-//   })
-// }
+if (!firebase.apps.length) {
+  console.log('%cCreating a new firebase instance...', 'color: grey; font-style: italic;padding: 2px')
+  let config = {
+    apiKey: 'AIzaSyANToL6Ybf-yoYNbB9jiZ_qjW3EVhu17P0',
+    authDomain: 'expense-9fef4.firebaseapp.com',
+    databaseURL: 'https://expense-9fef4.firebaseio.com',
+    storageBucket: 'expense-9fef4.appspot.com',
+    messagingSenderId: '144236555959'
+  }
+  firebase.initializeApp(config)
+}
 
 class Onboarding extends Component {
 
@@ -39,28 +20,69 @@ class Onboarding extends Component {
 
   constructor (props, context) {
     super(props, context)
+    this.uid = props.location.query.uid;
+    this.getSavedData();
     this.state = {
       step: 1,
       legalName: ((this.props.legalName) ? this.props.legalName : null),
-      ucscEmail: ((this.props.legalName) ? this.props.legalName : null),
-      phone: ((this.props.legalName) ? this.props.legalName : null),
-      address: [((this.props.legalName) ? this.props.legalName : null)],
+      ucscEmail: ((this.props.ucscEmail) ? this.props.ucscEmail : null),
+      phone: ((this.props.phone) ? this.props.phone : null),
+      address: [((this.props.address) ? this.props.address : null)],
       ssn: {
         value: null,
         error: null
       },
       payeeSetupSubmitted: false,
       slack: {
-        value: null,
+        value: ((this.props.slack) ? this.props.slack : null),
         error: null
       }
     }
   }
 
+  getSavedData() {
+    firebase.database().ref('/users/' + this.uid).once('value').then((snapshot) => {
+      const slack = snapshot.val()['slack']
+      const legalName = snapshot.val()['legalName']
+      const ucscEmail = snapshot.val()['ucscEmail']
+      const phone = snapshot.val()['phone']
+      const address = snapshot.val()['address'].split('\\n')
+      const payeeSetupSubmitted = snapshot.val()['payeeSetupSubmitted']
+      const ssn = '**' + JSON.stringify(snapshot.val()['SSN']).substring(2, 4)
+
+      const data = {
+        slack,
+        legalName,
+        ucscEmail,
+        phone,
+        address,
+        payeeSetupSubmitted,
+        ssn
+      }
+
+      this.setState(data)
+      console.log(this.state);
+    })
+  }
+
+  save(event) {
+    const _ = this.refs;
+    let data = {
+      slack : (_.slack) ? _.slack.value : "",
+      legalName : (_.legalName) ? _.legalName.value : "",
+      ucscEmail : (_.ucscEmail) ? _.ucscEmail.value : "",
+      phone : (_.phone) ? _.phone.value : "",
+      address : (_.address) ? _.address.value : "",
+      SSN : (_.ssn) ? _.ssn.value : "",
+      payeeSetupSubmitted : false
+    }
+
+    if(data) firebase.database().ref('users/' + this.uid).set(data);
+  }
+
   render () {
     return (
       <div>
-        { console.log(this.props, this.state) }
         <header>
           <nav>
             <h1>/expense</h1>
@@ -77,25 +99,25 @@ class Onboarding extends Component {
         <section>
           <div className='inputGroup'>
             <p>What's your FSAE Slack username?</p>
-            <input type='text' placeholder='@username' />
+            <input ref='slack' type='text' placeholder='@username' value={this.state.slack} />
             <span className='error'>{ this.state.slack.error }</span>
           </div>
 
           <div className='inputGroup'>
             <p>What's your legal name?</p>
-            <input type='text' placeholder='Firstname lastname' />
+            <input ref='legalName' type='text' placeholder='Firstname lastname' value={this.state.legalName} />
           </div>
 
           <div className='inputGroup'>
             <p>What's your phone number?</p>
             <p className='helperText'>This is required for submitting reimbursement forms to the university.</p>
-            <input type='tel' placeholder='123.456.7890' />
+            <input ref='phone' type='tel' placeholder='123.456.7890' value={this.state.phone} />
           </div>
 
           <div className='inputGroup'>
             <p>What's your address?</p>
             <p className='helperText'>This is also required for submitting reimbursement forms to the university.</p>
-            <input type='text' placeholder='123 Anydrive Road' />
+            <input ref='street' type='text' placeholder='123 Anydrive Road' />
             <div className='inputsRow'>
               <select className='oneThird'>
                 <option value='AL'>AL</option>
@@ -150,17 +172,37 @@ class Onboarding extends Component {
                 <option value='WI'>WI</option>
                 <option value='WY'>WY</option>
               </select>
-              <input type='text' placeholder='Santa Cruz' className='twoThird' />
+              <input ref='city' type='text' placeholder='Santa Cruz' className='twoThird' />
             </div>
           </div>
 
           <div className='inputGroup'>
             <p>Last 4 digits of your SSN, please.</p>
             <p className='helperText'>This is optional, but if you skip it, you'll have to manually download and add it to your reimbursement forms later. We store and trasnmit this data securely.</p>
-            <input type='number' inputMode='numeric' placeholder='1234' pattern='[0-9]{4}' required />
+            <input ref='ssn' type='number' inputMode='numeric' placeholder='1234' pattern='[0-9]{4}'  value={this.state.ssn} required />
             <span className='error'>{ this.state.ssn.error }</span>
           </div>
 
+          <div className='inputGroup'>
+            <p>Have you filled out an 204 form?</p>
+            <p className='helperText'>A 204 form is required by the college for reimbursements.</p>
+            <ul>
+              <li name='button' value='1'>
+                <input type='hidden' value="Yes" autoComplete="off" />
+                <span className="label">Yes</span>
+              </li>
+              <li name='button'>
+                <input type='hidden' value="No" autoComplete="off" />
+                <span className="label">No</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className='inputGroup'>
+            <button onClick={(event) => this.save(event)}>
+              Save
+            </button>
+          </div>
         </section>
       </div>
     )
