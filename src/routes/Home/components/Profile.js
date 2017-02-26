@@ -75,7 +75,6 @@ class Profile extends Component {
   render () {
     return (
       <div className='page'>
-        { (this.state.legalName === '...') ? this.getSavedData(this.props) : console.log(this.state.legalName) }
         <header>
           <nav>
             <h1>/expense</h1>
@@ -91,8 +90,8 @@ class Profile extends Component {
         <div className='savedData'>
           <div className='row'>
             <div className='key'>Saved data</div>
-            <div className='key'><Link to='onboarding'>Edit</Link></div>
-            {/* TODO: Make that edit button do stuff */}
+            {/* TODO: Find another way to pass UID to onboarding.*/}
+            <div className='key'><Link to={{ pathname: 'onboarding', query: { uid: this.props.uid } }}>Edit</Link></div>
           </div>
           <div className='row'>
             <div className='key'>Legal name</div>
