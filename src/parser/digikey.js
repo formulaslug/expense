@@ -1,4 +1,3 @@
-var phantom = require('x-ray-phantom');
 var Xray = require('x-ray');
 var Promise = require('bluebird');
 
@@ -14,12 +13,12 @@ var x = Xray({
             return typeof value === 'string' ? value.slice(start, end) : value
         }
     }
-}).driver(phantom());
+})
 
 
 function parse(link) {
     return new Promise((resolve, reject) => {
-        x(link, 'html', {
+        x(link, 'body', {
             partNumber: 'meta@content',
             mPartNumber: 'h1[itemprop] | trim',
             title: 'title'
